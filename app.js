@@ -46,19 +46,12 @@ var db = new Db('liftr', new Server(host, port, {}), {native_parser:false});
 
 db.open(function(err, db) {
   db.dropDatabase(function(err, result) {
-    sys.puts("===================================================================================");
-    sys.puts(">> Adding Authors");
-    db.collection('authors', function(err, collection) {
-      collection.createIndex(["meta", ['_id', 1], ['name', 1], ['age', 1]], function(err, indexName) {
-        sys.puts("===================================================================================");        
-        var authors = {};
-        
-        // Insert authors
-        collection.insert([{'name':'William Shakespeare', 'email':'william@shakespeare.com', 'age':587},
-                          {'name':'Jorge Luis Borges', 'email':'jorge@borges.com', 'age':123}], function(err, docs) {
+    db.collection('exersises', function(err, collection) {
+      collection.createIndex(["meta", ['_id', 1], ['name', 1]], function(err, indexName) {
+        collection.insert([{'name':'curls'},
+                          {'name':'pushups'}], function(err, docs) {
           docs.forEach(function(doc) {
             sys.puts(sys.inspect(doc));
-            authors[doc.name] = doc;
           });
         });
       });
@@ -70,8 +63,15 @@ db.open(function(err, db) {
 // Routes
 
 app.get('/', function(req, res){
-  res.render('index', {
-    title: 'Express'
+  db.collection('exersises', function(err, collection) {
+    collection.find(function(err, cursor) {
+      cursor.toArray(function(err, items) {
+        res.render('index', {
+          foo: 'basr',
+          exercises: items
+        });
+      });
+    });
   });
 });
 
