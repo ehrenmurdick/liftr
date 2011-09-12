@@ -48,8 +48,8 @@ db.open(function(err, db) {
   db.dropDatabase(function(err, result) {
     db.collection('exersises', function(err, collection) {
       collection.createIndex(["meta", ['_id', 1], ['name', 1]], function(err, indexName) {
-        collection.insert([{'name':'curls'},
-                          {'name':'pushups'}], function(err, docs) {
+        collection.insert([{name:'curls', 'sets': [5, 5, 5, 5], rest: 60},
+                          {name:'pushups', sets: [5, 5, 5, 5], rest: 120}], function(err, docs) {
           docs.forEach(function(doc) {
             sys.puts(sys.inspect(doc));
           });
@@ -67,11 +67,18 @@ app.get('/', function(req, res){
     collection.find(function(err, cursor) {
       cursor.toArray(function(err, items) {
         res.render('index', {
-          foo: 'basr',
           exercises: items
         });
       });
     });
+  });
+});
+
+app.get('/do/:id', function(req, res) {
+  res.render('show', {
+    exercise: {
+      name: req.params
+    }
   });
 });
 

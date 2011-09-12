@@ -1,4 +1,12 @@
 table
+  thead
+    th name
+    th rest time
+    th sets
   - each exercise in exercises
     tr
-      td= exercise.name
+      td
+        a(href=exercise._id)= exercise.name
+      td= exercise.rest
+      td= exercise.sets
+      td= exercise._id
