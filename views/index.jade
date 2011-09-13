@@ -6,7 +6,7 @@ table
   - each exercise in exercises
     tr
       td
-        a(href=exercise._id)= exercise.name
+        a(href="/do/#{exercise.name}")= exercise.name
       td= exercise.rest
       td= exercise.sets
       td= exercise._id
